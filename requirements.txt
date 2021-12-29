@@ -1,1 +1,4 @@
+numpy
+pre-commit
 tensorflow
+

@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 21.12b0
+    hooks:
+      - id: black
+        name: Run Black to format Python
+
+  - repo: https://github.com/pycqa/flake8
+    # Use Flake8 for Python linting
+    rev: 4.0.1
+    hooks:
+        - id: flake8
+          name: Run Flake8 to lint Python
+          args: ["--ignore", "E203", "--max-line-length", "88"]

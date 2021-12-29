@@ -3,10 +3,11 @@ import numpy as np
 
 class Game:
     """
-    Models a Hus game with board-width 12. 
+    Models a Hus game with board-width 12.
     The active player is always playing in rows 0 and 1,
     i.e. the board flips after every move.
     """
+
     def __init__(self):
         self.board = self.__init_board__()
         self.turn = 0
@@ -36,34 +37,34 @@ class Game:
         i, j = action % 12, action // 12
         print(self)
 
-        if not (i,j) in self.legal_actions():
+        if not (i, j) in self.legal_actions():
             print(f"Illegal move: {i,j}")
-            return False # lose on illegal moves
+            return False  # lose on illegal moves
 
         stones = self.board[i, j]
         self.board[i, j] = 0
 
         while stones != 0:
             print(self)
-            i,j = self.__next_pos(i, j)
-            if self.board[i,j] > 0 and stones == 1:
+            i, j = self.__next_pos(i, j)
+            if self.board[i, j] > 0 and stones == 1:
                 # pick up new stones from field
-                stones += self.board[i,j]
-                self.board[i,j] = 0
+                stones += self.board[i, j]
+                self.board[i, j] = 0
 
                 # check middle row and steal stones
-                if i == 1 and self.board[2,j] > 0:
-                    stones += self.board[2,j] + self.board[3,j]
-                    self.board[2:4,j] = 0
+                if i == 1 and self.board[2, j] > 0:
+                    stones += self.board[2, j] + self.board[3, j]
+                    self.board[2:4, j] = 0
             else:
                 # just drop ones stone
-                self.board[i,j] += 1
+                self.board[i, j] += 1
                 stones -= 1
 
         print(self)
         self.turn += 1
 
-        victory = self.check_victory() 
+        victory = self.check_victory()
         if victory != 0:
             print("You win!" if victory == 1 else "You lose!")
 
@@ -72,18 +73,17 @@ class Game:
 
         return self
 
-
     def __next_pos(self, i, j):
         if i == 0:
             if j != 11:
-                return i, j+1
+                return i, j + 1
             else:
-                return i+1, j
+                return i + 1, j
         elif i == 1:
             if j != 0:
-                return i, j-1
+                return i, j - 1
             else:
-                return i-1, j
+                return i - 1, j
         else:
             raise ValueError("Not in row 0 or 1")
 
@@ -91,12 +91,12 @@ class Game:
         """
         Checks if the current player has won or lost.
         Returns:
-            1,  if current player wins, 
-            -1, if current player loses, 
+            1,  if current player wins,
+            -1, if current player loses,
             0,  otherwise.
         """
         # check oppenent loss then self loss
-        for player in [1,0]:
+        for player in [1, 0]:
             half_board = self.board[player * 2 : player * 2 + 2, :]
             loss = all([s < 2 for s in half_board.flatten()])
             if loss:
@@ -104,11 +104,7 @@ class Game:
         return 0
 
     def legal_actions(self):
-        return [(i,j) 
-                for i in range(2) 
-                for j in range(12) 
-                if self.board[i,j] >= 2]
+        return [(i, j) for i in range(2) for j in range(12) if self.board[i, j] >= 2]
 
     def __str__(self):
         return str(self.board)
-
